@@ -1,0 +1,31 @@
+{
+  "entities": {
+    "Journal": {
+      "title": "Journal",
+      "description": "A private personal journal entry containing conversation and summary.",
+      "type": "object",
+      "properties": {
+        "conversation": {
+          "type": "string",
+          "description": "Conversation log or journaling thoughts"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Summary of the journal entry"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the journal was created"
+        }
+      },
+      "required": ["conversation", "summary", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/journals/{journalId}": {
+      "schema": "Journal",
+      "description": "Per-user isolated journal entries. Accessible strictly by the authenticated owner where request.auth.uid == userId."
+    }
+  }
+}

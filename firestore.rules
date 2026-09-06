@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Strict per-user isolation for journal entries
+    // Path: users/{userId}/journals/{journalId}
+    match /users/{userId}/journals/{journalId} {
+      // 1. Unauthenticated users cannot read or write journal data.
+      // 2. An authenticated user can read only journals under their own UID.
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // 3. An authenticated user can create only journals under their own UID.
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // 4. An authenticated user can update only journals under their own UID.
+      allow update: if request.auth != null && request.auth.uid == userId;
+
+      // 5. An authenticated user can delete only journals under their own UID.
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
